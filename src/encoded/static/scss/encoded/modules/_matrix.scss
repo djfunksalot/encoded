@@ -107,6 +107,12 @@ $row-data-header-width: 200px;
                 transform: rotate(180deg);
                 color: #000;
 
+                // Column subcategory links
+                &.sub {
+                    padding-top: 20px;
+                    color: #808080;
+                }
+
                 &:hover {
                     background-color: #e0e0e0;
                 }
@@ -450,6 +456,23 @@ $row-data-header-width: 200px;
             margin-bottom: 0;
         }
     }
+
+    @at-root #{&}__target-filter-controls {
+        @media screen and (min-width: $screen-md-min) {
+            flex: 0 1 35%;
+            padding-right: 20px;
+        }
+    }
+
+    @at-root #{&}__target-search-controls {
+        @media screen and (min-width: $screen-md-min) {
+            flex: 0 1 65%;
+        }
+
+        .results-table-control {
+            margin-bottom: 0;
+        }
+    }
 }
 
 
@@ -580,6 +603,28 @@ table.matrix th.group-all-groups-cell {
     }
 }
 
+.matrix__content--target {
+    @extend .matrix__content--reference-epigenome;
+
+    .target-matrix__data-wrapper {
+        li {
+            cursor: -webkit-grab;
+            cursor: grab;
+            a::after {
+                content: none !important;
+            }
+        }   
+    }
+}
+
+.target-matrix-search {
+    display: flex;
+    justify-content: space-between;
+
+    select {
+        margin-left: 5px;
+    }
+}
 
 // Contents of organism-selection modal.
 .matrix-reference-epigenome__organism-selector {
@@ -601,6 +646,9 @@ table.matrix th.group-all-groups-cell {
     }
 }
 
+.target-matrix__organism-selector {
+    @extend .matrix-reference-epigenome__organism-selector;
+}
 
 /**
  * Styles specific to the ENTEx matrix.

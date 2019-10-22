@@ -29,6 +29,7 @@ require('./matrix_audit');
 require('./matrix_entex');
 require('./matrix_experiment');
 require('./matrix_reference_epigenome');
+require('./matrix_target');
 require('./target');
 require('./publication');
 require('./pipeline');
