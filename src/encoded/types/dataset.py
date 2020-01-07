@@ -52,21 +52,6 @@ def calculate_assembly(request, files_list, status):
 class Dataset(Item):
     base_types = ['Dataset'] + Item.base_types
     embedded = [
-        'files',
-        'files.replicate',
-        'files.replicate.experiment',
-        'files.replicate.experiment.lab',
-        'files.replicate.experiment.target',
-        'files.replicate.experiment.target.genes',
-        'files.submitted_by',
-        'files.lab',
-        'revoked_files',
-        'revoked_files.replicate',
-        'revoked_files.replicate.experiment',
-        'revoked_files.replicate.experiment.lab',
-        'revoked_files.replicate.experiment.target',
-        'revoked_files.replicate.experiment.target.genes',
-        'revoked_files.submitted_by',
         'submitted_by',
         'lab',
         'award.pi.lab',
