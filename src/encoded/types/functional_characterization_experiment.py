@@ -47,21 +47,6 @@ class FunctionalCharacterizationExperiment(
     item_type = 'functional_characterization_experiment'
     schema = load_schema('encoded:schemas/functional_characterization_experiment.json')
     embedded = Dataset.embedded + [
-        'files',
-        'files.replicate',
-        'files.replicate.experiment',
-        'files.replicate.experiment.lab',
-        'files.replicate.experiment.target',
-        'files.replicate.experiment.target.genes',
-        'files.submitted_by',
-        'files.lab',
-        'revoked_files',
-        'revoked_files.replicate',
-        'revoked_files.replicate.experiment',
-        'revoked_files.replicate.experiment.lab',
-        'revoked_files.replicate.experiment.target',
-        'revoked_files.replicate.experiment.target.genes',
-        'revoked_files.submitted_by',
         'biosample_ontology',
         'files.platform',
         'files.analysis_step_version.analysis_step',

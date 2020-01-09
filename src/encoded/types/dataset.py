@@ -55,7 +55,22 @@ class Dataset(Item):
         'submitted_by',
         'lab',
         'award.pi.lab',
-        'references'
+        'references',
+        'files',
+        'files.replicate',
+        'files.replicate.experiment',
+        'files.replicate.experiment.lab',
+        'files.replicate.experiment.target',
+        'files.replicate.experiment.target.genes',
+        'files.submitted_by',
+        'files.lab',
+        'revoked_files',
+        'revoked_files.replicate',
+        'revoked_files.replicate.experiment',
+        'revoked_files.replicate.experiment.lab',
+        'revoked_files.replicate.experiment.target',
+        'revoked_files.replicate.experiment.target.genes',
+        'revoked_files.submitted_by',
     ]
     audit_inherit = [
         'original_files',
@@ -348,12 +363,10 @@ class Annotation(FileSet, CalculatedVisualize):
         'title': "Publication file set",
         'description': 'A set of files that are described/analyzed in a publication.',
     })
-class PublicationData(FileSet, CalculatedFileSetBiosample, CalculatedFileSetAssay, CalculatedAssaySynonyms):
+class PublicationData(FileSet):
     item_type = 'publication_data'
     schema = load_schema('encoded:schemas/publication_data.json')
     embedded = [
-        'biosample_ontology',
-        'organism',
         'submitted_by',
         'lab',
         'award.pi.lab',
