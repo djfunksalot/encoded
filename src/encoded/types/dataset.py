@@ -375,7 +375,7 @@ class PublicationData(FileSet):
         'documents.submitted_by',
         'references'
     ]
-
+    audit_inherit = []
     @calculated_property(schema={
         "title": "Contributing files",
         "type": "array",
