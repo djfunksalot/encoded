@@ -376,6 +376,40 @@ class PublicationData(FileSet):
         'references'
     ]
 
+    @calculated_property(schema={
+        "title": "Contributing files",
+        "type": "array",
+        "items": {
+            "type": "string",
+            "linkTo": "File",
+        },
+    })
+    def contributing_files(self, request, original_files, related_files, status):
+        return []
+
+
+    @calculated_property(define=True, schema={
+        "title": "Files",
+        "type": "array",
+        "items": {
+            "type": "string",
+            "linkTo": "File",
+        },
+    })
+    def files(self, request, original_files, related_files, status):
+        return chain(original_files, related_files)
+
+    @calculated_property(schema={
+        "title": "Revoked files",
+        "type": "array",
+        "items": {
+            "type": "string",
+            "linkTo": "File",
+        },
+    })
+    def revoked_files(self, request, original_files, related_files):
+        return []
+
 
 @collection(
     name='references',
