@@ -397,7 +397,7 @@ class PublicationData(FileSet):
         },
     })
     def files(self, request, original_files, related_files, status):
-        return chain(original_files, related_files)
+        return original_files.extend(related_files)
 
     @calculated_property(schema={
         "title": "Revoked files",
