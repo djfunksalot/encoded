@@ -86,14 +86,31 @@ export default class Navigation extends React.Component {
      * @param {object} e React synthetic event
      */
     dropdownClick(dropdownId, e) {
+        function isMobile() {
+            try {
+                document.createEvent('TouchEvent'); return true;
+            } catch (evt) {
+                return false;
+            }
+        }
+        const isMobileDevice = isMobile();
+        let executeUserAction = true;
         // After clicking the dropdown trigger button, don't allow the event to bubble to the rest of the DOM.
         if (e) {
             e.nativeEvent.stopImmediatePropagation();
+            if ((e.type === 'mouseenter' || e.type === 'mouseleave') && isMobileDevice) {
+                executeUserAction = false;
+            }
+            if (e.type === 'click' && !(isMobileDevice)) {
+                executeUserAction = false;
+            }
         }
         const dropdownIdIsString = typeof dropdownId === 'string';
-        this.setState(prevState => ({
-            openDropdown: ((dropdownId !== prevState.openDropdown) && dropdownIdIsString) ? dropdownId : '',
-        }));
+        if (executeUserAction) {
+            this.setState(prevState => ({
+                openDropdown: ((dropdownId !== prevState.openDropdown) && dropdownIdIsString) ? dropdownId : '',
+            }));
+        }
     }
 
     /**
