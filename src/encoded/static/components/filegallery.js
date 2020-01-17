@@ -2013,7 +2013,7 @@ function createFacetObject(propertyKey, fileList, filters) {
 //                 "WS245"
 // outlier:
 //                 "None"
-function computeAssemblyAnnotationValue(assembly, annotation) {
+export function computeAssemblyAnnotationValue(assembly, annotation) {
     // There are three levels of sorting
     // First level of sorting: most recent assemblies are ordered first (represented by numerical component of assembly)
     // Second level of sorting: assemblies without '-minimal' are sorted before assemblies with '-minimal' at the end (represented by tenths place value which is 5 if there is no '-minimial')

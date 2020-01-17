@@ -190,22 +190,6 @@
         border-bottom: 1px solid #ddd;
     }
 
-    // Cart result table pager control area.
-    @at-root #{&}__pager {
-        flex: 0 1 auto;
-
-        @at-root #{&}-note {
-            display: none;
-            margin-left: 5px;
-            font-size: 0.9rem;
-            color: #606060;
-
-            @media screen and (min-width: $screen-sm-min) {
-                display: inline-block;
-            }
-        }
-    }
-
     // Cart add/remove toggle button
     @at-root #{&}__toggle {
         display: block;
@@ -351,6 +335,47 @@
             width: 100%;
         }
     }
+
+    &-content {
+        @media screen and (min-width: $screen-sm-min) {
+            flex: 1 1 auto;
+        }
+
+        .tab-nav {
+            display: flex;
+            justify-content: space-between;
+
+            .nav-tabs {
+                border-top: 1px solid #ccc;
+                border-left: 1px solid #ccc;
+            }
+
+            .cart {
+                @at-root #{&}__tab-tools {
+                    flex: 0 1 auto;
+                    align-self: center;
+                    margin-right: 5px;
+                }
+            }
+        }
+
+        .result-table {
+            border-top: none;
+        }
+    }
+}
+
+
+// Defines check boxes and radio button on the cart facets.
+$cart-facet-check-box-size: 18px;
+%facet-term-control {
+    display: flex;
+    flex: 0 0 $cart-facet-check-box-size;
+    width: $cart-facet-check-box-size;
+    height: $cart-facet-check-box-size;
+    border: 1px solid #c0c0c0;
+    justify-content: center;
+    align-items: center;
 }
 
 
@@ -396,16 +421,9 @@
         }
 
         // Checkbox for a facet term
-        $cart-facet-check-box-size: 18px;
         @at-root #{&}__check {
-            display: flex;
-            flex: 0 0 $cart-facet-check-box-size;
-            width: $cart-facet-check-box-size;
-            height: $cart-facet-check-box-size;
-            border: 1px solid #c0c0c0;
+            @extend %facet-term-control;
             border-radius: 3px;
-            justify-content: center;
-            align-items: center;
 
             $cart-facet-check-size: 16px;
             .icon {
@@ -415,6 +433,24 @@
         }
 
         @at-root #{&}__check--checked {
+            background-color: #008000;
+            color: #fff;
+        }
+
+        @at-root #{&}__radio {
+            @extend %facet-term-control;
+            border-radius: $cart-facet-check-box-size / 2;
+            text-align: center;
+
+            $cart-facet-radio-size: 8px;
+            .icon {
+                flex: 0 0 $cart-facet-radio-size;
+                font-size: $cart-facet-radio-size;
+                line-height: $cart-facet-check-box-size;
+            }
+        }
+
+        @at-root #{&}__radio--checked {
             background-color: #008000;
             color: #fff;
         }
