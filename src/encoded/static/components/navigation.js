@@ -197,6 +197,9 @@ const GlobalSections = (props, context) => {
                         return (
                             <a href={childAction.url || ''} key={childAction.id} className={childAction.tag ? 'sub-menu' : childAction.url ? '' : 'disabled-menu-item'}>
                                 {childAction.title}
+                                {!(childAction.tag) ?
+                                    <i className="icon icon-question-circle" />
+                                : null}
                             </a>
                         );
                     })}

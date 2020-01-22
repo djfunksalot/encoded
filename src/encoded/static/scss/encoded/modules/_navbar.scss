@@ -256,6 +256,11 @@ $navbar-bg-color:            #0a253d;
         pointer-events: none;
         font-weight: 400;
     }
+    .icon-question-circle {
+        margin-left: 5px;
+        color: #9F9F9F;
+        // font-size: 12px;
+    }
 
      @media screen and (min-width: $screen-md-min) {
         position: absolute;
