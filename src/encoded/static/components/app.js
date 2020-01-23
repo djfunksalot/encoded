@@ -212,6 +212,25 @@ EulaModal.propTypes = {
     signup: PropTypes.func.isRequired,
 };
 
+const AccountCreationFailedModal = ({ closeModal }) => (
+    <Modal>
+        <ModalHeader title="Failed to create a new account." closeModal={closeModal} />
+        <ModalBody>
+            <p>
+                Creating a new acount failed. Please, contact <a href="mailto:encode-help@lists.stanford.edu">support</a>.
+            </p>
+        </ModalBody>
+        <ModalFooter
+            cancelTitle="Close"
+            closeModal={closeModal}
+        />
+    </Modal>
+);
+
+AccountCreationFailedModal.propTypes = {
+    closeModal: PropTypes.func.isRequired,
+};
+
 
 // App is the root component, mounted on document.body.
 // It lives for the entire duration the page is loaded.
@@ -246,6 +265,7 @@ class App extends React.Component {
             unsavedChanges: [],
             promisePending: false,
             eulaModalVisibility: false,
+            accountCreationFailedVisibility: false,
             authResult: '',
         };
 
@@ -280,6 +300,7 @@ class App extends React.Component {
         this.currentResource = this.currentResource.bind(this);
         this.currentAction = this.currentAction.bind(this);
         this.closeSignupModal = this.closeSignupModal.bind(this);
+        this.closeAccountCreationErrorModal = this.closeAccountCreationErrorModal.bind(this);
         this.signup = this.signup.bind(this);
     }
 
@@ -533,6 +554,10 @@ class App extends React.Component {
         this.setState({ eulaModalVisibility: false });
     }
 
+    closeAccountCreationErrorModal() {
+        this.setState({ accountCreationFailedVisibility: false });
+    }
+
     signup() {
         const authResult = this.state.authResult;
 
@@ -555,8 +580,8 @@ class App extends React.Component {
             }
             // sign in after account creation
             this.handleAuth0Login(authResult, false, false);
-        }).catch((err) => {
-            console.warn(err);
+        }).catch(() => {
+            this.setState({ accountCreationFailedVisibility: true });
         });
     }
 
@@ -1204,6 +1229,11 @@ class App extends React.Component {
                                     signup={this.signup}
                                 /> :
                             null}
+                            {this.state.accountCreationFailedVisibility ?
+                                <AccountCreationFailedModal
+                                    closeModal={this.closeAccountCreationErrorModal}
+                                /> :
+                                null}
                             <Footer version={this.props.context.app_version} />
                         </div>
                     </div>
