@@ -589,7 +589,7 @@ class TargetMatrixPresentation extends React.Component {
             const selectedAxis = targetData[searchField] || [];
 
             if (searchField === 'headerRow') {
-                const filtered = selectedAxis.map((m, i) => {
+                const filterResultIndexes = selectedAxis.map((m, i) => {
                     if (m.toLocaleLowerCase().indexOf(searchText) !== -1) {
                         return i;
                     }
@@ -597,19 +597,25 @@ class TargetMatrixPresentation extends React.Component {
                 }).filter(m => m !== null);
 
                 const dataRowLength = targetData.dataRow.length;
-                dataRow = [...Array(dataRowLength)].fill([]);
+
+                // .fill([]) duplicate the same array reference rather than create a new array
+                // so map was used
+                dataRow = [...Array(dataRowLength)].map(() => []);
+
                 headerRow = [];
 
-                filtered.forEach((i) => {
+                filterResultIndexes.forEach((i) => {
                     headerRow.push(targetData.headerRow[i]);
                 });
 
                 for (let j = 0; j < dataRowLength; j += 1) {
+                    // get text of first entry (target)
                     dataRow[j].push(targetData.dataRow[j][0]);
 
-                    for (let k = 0; k < filtered.length; k += 1) {
+                    // get entries other than the first
+                    for (let k = 0; k < filterResultIndexes.length; k += 1) {
                         // header row is offset by 1 compared to data row
-                        dataRow[j].push(targetData.dataRow[j][filtered[k] + 1]);
+                        dataRow[j].push(targetData.dataRow[j][filterResultIndexes[k] + 1]);
                     }
                 }
             } else {
