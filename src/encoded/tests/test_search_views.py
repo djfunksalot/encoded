@@ -436,6 +436,34 @@ def test_search_views_matrix_response_no_results(workbook, testapp):
     assert r.json['notification'] == 'No results found'
 
 
+def test_target_matrix_view(workbook, testapp):
+    res = testapp.get('/target-matrix/?type=Experiment').json
+    assert res['@type'] == ['TargetMatrix']
+    assert res['@id'] == '/target-matrix/?type=Experiment'
+    assert res['@context'] == '/terms/'
+    assert res['notification'] == 'Success'
+    assert res['title'] == 'Target Matrix'
+    assert res['total'] > 0
+    assert 'filters' in res
+    assert 'matrix' in res
+    assert res['matrix']['x']['group_by'] == [
+        'biosample_ontology.classification',
+        'biosample_ontology.term_name'
+    ]
+    assert res['matrix']['x']['label'] == 'Term Name'
+    assert res['matrix']['y']['group_by'] == [
+        'replicates.library.biosample.donor.organism.scientific_name',
+        'target.label'
+    ]
+    assert res['matrix']['y']['label'] == 'Target'
+    assert len(res['matrix']['y']['replicates.library.biosample.donor.organism.scientific_name']['buckets']) > 0
+    assert len(
+        res['matrix']['y']['replicates.library.biosample.donor.organism.scientific_name']['buckets'][0]['target.label']['buckets']
+)       > 0
+    assert res['matrix']['viewableTabs'] == ['Homo sapiens', 'Mus musculus']
+    assert res['matrix']['assay_titles'] == ['Histone ChIP-seq', 'TF ChIP-seq']
+
+
 def test_search_views_summary_response(workbook, testapp):
     r = testapp.get('/summary/?type=Experiment')
     assert 'aggregations' not in r.json

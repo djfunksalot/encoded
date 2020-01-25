@@ -80,8 +80,7 @@ const getTargetData = (context, assayTitle, organismName) => {
 
         yData.forEach((y) => {
             const yKey = Object.keys(y)[0];
-            // IE11 does not support .fill. So .map is used.
-            dataRowT[yKey] = dataRowT[yKey] || [...Array(headerRowLength + 1)].map(x => 0);
+            dataRowT[yKey] = dataRowT[yKey] || [...Array(headerRowLength + 1)].fill(0);
             dataRowT[yKey][0] = yKey;
 
             const keyDocCountPair = y[yKey].reduce((a, b) => {
@@ -106,7 +105,6 @@ const getTargetData = (context, assayTitle, organismName) => {
         targetData[subTab] = { headerRow, dataRow, assayTitle, organismName };
     });
 
-    // const subTabs = subTabList;
     const subTabs = subTabList;
     const subTabsHeaders = [];
 
@@ -555,7 +553,7 @@ class TargetMatrixPresentation extends React.Component {
      *  Its mains job is to extract required data from targetData object. This is computationally cheaper than
      *  refetching a new context and going off that.
      *
-     * @param {*} e
+     * @param {object} e - event object
      * @memberof TargetMatrixPresentation
      */
     subTabClicked(e) {
@@ -599,7 +597,7 @@ class TargetMatrixPresentation extends React.Component {
                 }).filter(m => m !== null);
 
                 const dataRowLength = targetData.dataRow.length;
-                dataRow = [...Array(dataRowLength)].fill(0);
+                dataRow = [...Array(dataRowLength)].fill([]);
                 headerRow = [];
 
                 filtered.forEach((i) => {
@@ -610,7 +608,8 @@ class TargetMatrixPresentation extends React.Component {
                     dataRow[j].push(targetData.dataRow[j][0]);
 
                     for (let k = 0; k < filtered.length; k += 1) {
-                        dataRow[j].push(targetData.dataRow[j][filtered[k] + 1]); // x is offset by 1 compared to y
+                        // header row is offset by 1 compared to data row
+                        dataRow[j].push(targetData.dataRow[j][filtered[k] + 1]);
                     }
                 }
             } else {
@@ -618,7 +617,7 @@ class TargetMatrixPresentation extends React.Component {
                 headerRow = targetData.headerRow;
             }
 
-            // clear data if x or y axis is empty
+            // clear data if both data or header row if either is empty, so show no-data message
             if (headerRow.length === 0) {
                 dataRow = [];
             } else if (dataRow.length === 0) {
@@ -707,13 +706,14 @@ class TargetMatrixPresentation extends React.Component {
                     {showOrganismRequest ? <GetTargets /> : null }
                     <TargetTabPanel tabs={headers} selectedTab={this.state.selectedTab} tabPanelCss="matrix__data-wrapper">
                         <TargetTabPanel tabs={this.subTabsHeaders} selectedTab={selectedSubTab} tabPanelCss="matrix__data-wrapper" handleTabClick={this.subTabClicked} fontColors={fontColors}>
-                            {targetData ?
+                            {targetData && targetData.headerRow && targetData.headerRow.length !== 0 && targetData.dataRow && targetData.dataRow.length !== 0 ?
                                   <div className="matrix__data" onScroll={this.handleOnScroll} ref={(element) => { this.scrollElement = element; }}>
-                                      <DataTable tableData={convertTargetDataToDataTable(targetData, selectedSubTab)}> test </DataTable>
+                                      <DataTable tableData={convertTargetDataToDataTable(targetData, selectedSubTab)} />
                                   </div>
                               :
                                   <div className="matrix__warning">
-                                      { context.total === 0 ? 'No data to display' : 'Select an organism to view data.' }
+                                      <br />
+                                      { targetData && Object.keys(targetData).length === 0 ? 'Select an organism to view data.' : 'No data to display.' }
                                       <br /><br /><br />
                                   </div>
                             }
