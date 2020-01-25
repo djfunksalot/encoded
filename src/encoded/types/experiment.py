@@ -218,6 +218,17 @@ class Experiment(Dataset,
             'label': 'Assay',
         },
     }
+    
+    mouse_development = {
+        'y': {
+            'group_by': ['biosample_ontology.classification', 'biosample_ontology.term_name'],
+            'label': 'Biosample',
+        },
+        'x': {
+            'group_by': 'assay_title',
+            'label': 'Assay',
+        },
+    }
 
     audit = {
         'audit.ERROR.category': {
