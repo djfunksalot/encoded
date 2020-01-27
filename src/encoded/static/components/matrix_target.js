@@ -25,7 +25,7 @@ const CLEAR_SEARCH_BOX_PUBSUB = 'clearSearchBox';
  * @param {context} context - Context from react
  * @param {string} assayTitle - Assay Title
  * @param {string} organismName - Organism Name
- * @returns {object} - Object with structure - { targetData, subTabs, subTabsHeaders };
+ * @returns {object} - Object with structure - { targetData, subTabs };
  *
  *      targetData is an object where:
  *          key is a sub Tab
@@ -35,7 +35,6 @@ const CLEAR_SEARCH_BOX_PUBSUB = 'clearSearchBox';
  *              assayTitle - Assay title
  *              organismName- Organism name
  *      subTabs: List of subTabs for easy access
- *      subTabsHeaders- List of Sub tab headers
  */
 const getTargetData = (context, assayTitle, organismName) => {
     if (!context || !context.matrix || !context.matrix.x || !context.matrix.y || !assayTitle || !organismName) {
@@ -43,10 +42,10 @@ const getTargetData = (context, assayTitle, organismName) => {
     }
 
     const subTabSource = 'biosample_ontology.classification';
-    const subTabList = context.matrix.x[subTabSource].buckets.map(x => x.key);
+    const subTabs = context.matrix.x[subTabSource].buckets.map(x => x.key);
     const targetData = {};
 
-    subTabList.forEach((subTab) => {
+    subTabs.forEach((subTab) => {
         const xGroupBy1 = context.matrix.x.group_by[0];
         const xGroupBy2 = context.matrix.x.group_by[1];
         const headerRow = context.matrix.x[xGroupBy1].buckets.find(f => f.key === subTab)[xGroupBy2]
@@ -65,7 +64,6 @@ const getTargetData = (context, assayTitle, organismName) => {
             .find(rBucket => rBucket.key === organismName)[yGroupBy2].buckets
             .reduce((a, b) => {
                 const m = {};
-                let c;
                 m[b.key] = b[xGroupBy1].buckets
                     .filter(f => f.key === subTab)
                     .reduce((x, y) => {
@@ -105,13 +103,10 @@ const getTargetData = (context, assayTitle, organismName) => {
         targetData[subTab] = { headerRow, dataRow, assayTitle, organismName };
     });
 
-    const subTabs = subTabList.sort();
-    const subTabsHeaders = [];
-
-    subTabList.forEach((subTab) => {
-        subTabsHeaders.push({ title: subTab });
-    });
-    return { targetData, subTabs, subTabsHeaders };
+    return {
+        targetData,
+        subTabs: subTabs.sort(),
+    };
 };
 
 
@@ -553,7 +548,7 @@ class TargetMatrixPresentation extends React.Component {
 
         this.targetMatrixData = Object.assign({}, data);
         this.subTabs = data ? data.subTabs : [];
-        this.subTabsHeaders = data ? data.subTabsHeaders : [];
+        this.subTabsHeaders = data.subTabs.map(subTab => ({ title: subTab }));
         const selectedSubTab = data && data.subTabs && data.subTabs.length > 0 ? data.subTabs[0] : null;
         const targetData = data ? data.targetData[selectedSubTab] : {};
 
