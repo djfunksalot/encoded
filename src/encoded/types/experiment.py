@@ -200,8 +200,6 @@ class Experiment(Dataset,
             'group_by': ['biosample_ontology.classification', 'biosample_ontology.term_name'],
             'label': 'Term Name',
         },
-        'viewableTabs': ['Homo sapiens', 'Mus musculus'],
-        'assay_titles': ['Histone ChIP-seq', 'TF ChIP-seq'],
     }
 
     summary = {

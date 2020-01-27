@@ -367,4 +367,3 @@ def audit(context, request):
         ]
     )
     return fr.render()
-    

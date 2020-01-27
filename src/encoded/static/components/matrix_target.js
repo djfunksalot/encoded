@@ -65,6 +65,7 @@ const getTargetData = (context, assayTitle, organismName) => {
             .find(rBucket => rBucket.key === organismName)[yGroupBy2].buckets
             .reduce((a, b) => {
                 const m = {};
+                let c;
                 m[b.key] = b[xGroupBy1].buckets
                     .filter(f => f.key === subTab)
                     .reduce((x, y) => {
@@ -72,8 +73,7 @@ const getTargetData = (context, assayTitle, organismName) => {
                             .reduce((i, j) => i.concat(j), []));
                         return x;
                     }, []);
-                a.push(m);
-                return a;
+                return a.concat(m);
             }, []);
 
         const dataRowT = {};
@@ -122,7 +122,7 @@ const getTargetData = (context, assayTitle, organismName) => {
  * @returns Number 0 or higher that corresponds to search count
  */
 const getSearchResultCount = (targetData) => {
-    const count = [...targetData.dataRow]
+    const count = targetData.dataRow
         .reduce((a, b) => [...a, ...b], [])
         .filter(i => !isNaN(i))
         .reduce((a, b) => a + b, 0);
@@ -186,14 +186,8 @@ const convertTargetDataToDataTable = (targetData, selectedSubTab) => {
 
     dataTable.push(...rowData);
 
-    const rowKeys = [];
-    for (let i = 0; i < dataTable.length; i += 1) {
-        rowKeys.push(`key${i}`);
-    }
-
     const matrixConfig = {
         rows: dataTable,
-        rowKeys,
         tableCss: 'matrix',
     };
 
@@ -215,6 +209,36 @@ Spinner.propTypes = {
 Spinner.defaultProps = {
     isSpinnerActive: false,
 };
+
+
+/**
+ * Tab data
+ *
+ * Note: The server does not return all of this data. So it is hard-coded to make it ever-available.
+ */
+const headers = [
+    {
+        organismName: 'Homo sapiens',
+        assayTitle: 'Histone ChIP-seq',
+        title: 'Homo sapiens | Histone ChIP-seq',
+        url: 'replicates.library.biosample.donor.organism.scientific_name=Homo sapiens&assay_title=Histone ChIP-seq',
+    }, {
+        organismName: 'Homo sapiens',
+        assayTitle: 'TF ChIP-seq',
+        title: 'Homo sapiens | TF ChIP-seq',
+        url: 'replicates.library.biosample.donor.organism.scientific_name=Homo sapiens&assay_title=TF ChIP-seq',
+    }, {
+        organismName: 'Mus musculus',
+        assayTitle: 'Histone ChIP-seq',
+        title: 'Mus musculus | Histone ChIP-seq',
+        url: 'replicates.library.biosample.donor.organism.scientific_name=Mus musculus&assay_title=Histone ChIP-seq',
+    }, {
+        organismName: 'Mus musculus',
+        assayTitle: 'TF ChIP-seq',
+        title: 'Mus musculus | TF ChIP-seq',
+        url: 'replicates.library.biosample.donor.organism.scientific_name=Mus musculus&assay_title=TF ChIP-seq',
+    },
+];
 
 /**
  * Target Matrix text filter.
@@ -391,9 +415,9 @@ TargetMatrixContent.propTypes = {
  * Component for creating tab-markup.
  *
  * @class TargetTabPanel
- * @extends {TabPanel}
+ * @extends {React.Component}
  */
-class TargetTabPanel extends TabPanel {
+class TargetTabPanel extends React.Component {
     render() {
         const { tabs, navCss, moreComponents, moreComponentsClasses, tabFlange, decoration, decorationClasses, selectedTab, handleTabClick, fontColors } = this.props;
         let children = [];
@@ -444,7 +468,26 @@ class TargetTabPanel extends TabPanel {
 }
 
 TargetTabPanel.propTypes = {
-    tabs: PropTypes.array,
+    /** Object with tab=>pane specifications */
+    tabs: PropTypes.object.isRequired,
+    /** key of tab to select (must provide handleTabClick) too; null for no selection */
+    selectedTab: PropTypes.string,
+    /** Classes to add to navigation <ul> */
+    navCss: PropTypes.string,
+    /** Other components to render in the tab bar */
+    moreComponents: PropTypes.object,
+    /** Classes to add to moreComponents wrapper <div> */
+    moreComponentsClasses: PropTypes.string,
+    /** True to show a small full-width strip under active tab */
+    tabFlange: PropTypes.bool,
+    /** Component to render in the tab bar */
+    decoration: PropTypes.object,
+    /** CSS classes to wrap decoration in */
+    decorationClasses: PropTypes.string,
+    /** If selectedTab is provided, then parent must keep track of it */
+    handleTabClick: PropTypes.func,
+    children: PropTypes.node,
+    fontColors: PropTypes.array,
 };
 
 TargetTabPanel.contextTypes = {
@@ -454,6 +497,15 @@ TargetTabPanel.contextTypes = {
 
 TargetTabPanel.defaultProps = {
     fontColors: null,
+    selectedTab: '',
+    navCss: null,
+    moreComponents: null,
+    moreComponentsClasses: '',
+    tabFlange: false,
+    decoration: null,
+    decorationClasses: null,
+    handleTabClick: null,
+    children: null,
 };
 
 
@@ -462,21 +514,19 @@ TargetTabPanel.defaultProps = {
  *
  */
 const GetTargets = () => (
-    <>
-        <Modal>
-            <ModalHeader closeModal={false} addCss="matrix__modal-header">
-                <h2>ChIP Target Matrix &mdash; choose organism</h2>
-            </ModalHeader>
-            <ModalBody addCss="target-matrix__organism-selector">
-                <div>Organism to view in matrix:</div>
-                <div className="selectors">
-                    {['Homo sapiens', 'Mus musculus'].map((organism, index) =>
-                        <a key={index} className={`btn btn-info btn__selector--${organism.replace(/ /g, '-')}`} href={`/target-matrix/?type=Experiment&replicates.library.biosample.donor.organism.scientific_name=${organism}&assay_title=Histone%20ChIP-seq&status=released`}>{organism}</a>
-                    )}
-                </div>
-            </ModalBody>
-        </Modal>
-    </>);
+    <Modal>
+        <ModalHeader closeModal={false} addCss="matrix__modal-header">
+            <h2>ChIP Target Matrix &mdash; choose organism</h2>
+        </ModalHeader>
+        <ModalBody addCss="target-matrix__organism-selector">
+            <div>Organism to view in matrix:</div>
+            <div className="selectors">
+                {['Homo sapiens', 'Mus musculus'].map((organism, index) =>
+                    <a key={index} className={`btn btn-info btn__selector--${organism.replace(/ /g, '-')}`} href={`/target-matrix/?type=Experiment&replicates.library.biosample.donor.organism.scientific_name=${organism}&assay_title=Histone%20ChIP-seq&status=released`}>{organism}</a>
+                )}
+            </div>
+        </ModalBody>
+    </Modal>);
 
 /**
  * Container for Target Matrix page's content.
@@ -672,32 +722,6 @@ class TargetMatrixPresentation extends React.Component {
     render() {
         const { context } = this.props;
         const { scrolledRight, targetData, showOrganismRequest, selectedSubTab } = this.state;
-
-        // The server does not return all of this data. So it is hard-coded to make it ever-available.
-        const headers = [
-            {
-                organismName: 'Homo sapiens',
-                assayTitle: 'Histone ChIP-seq',
-                title: 'Homo sapiens | Histone ChIP-seq',
-                url: 'replicates.library.biosample.donor.organism.scientific_name=Homo sapiens&assay_title=Histone ChIP-seq',
-            }, {
-                organismName: 'Homo sapiens',
-                assayTitle: 'TF ChIP-seq',
-                title: 'Homo sapiens | TF ChIP-seq',
-                url: 'replicates.library.biosample.donor.organism.scientific_name=Homo sapiens&assay_title=TF ChIP-seq',
-            }, {
-                organismName: 'Mus musculus',
-                assayTitle: 'Histone ChIP-seq',
-                title: 'Mus musculus | Histone ChIP-seq',
-                url: 'replicates.library.biosample.donor.organism.scientific_name=Mus musculus&assay_title=Histone ChIP-seq',
-            }, {
-                organismName: 'Mus musculus',
-                assayTitle: 'TF ChIP-seq',
-                title: 'Mus musculus | TF ChIP-seq',
-                url: 'replicates.library.biosample.donor.organism.scientific_name=Mus musculus&assay_title=TF ChIP-seq',
-            },
-        ];
-
         const fontColors = globals.biosampleTypeColors.colorList(this.targetMatrixData.subTabs, { merryGoRoundColors: true });
 
         return (
@@ -717,10 +741,8 @@ class TargetMatrixPresentation extends React.Component {
                                       <DataTable tableData={convertTargetDataToDataTable(targetData, selectedSubTab)} />
                                   </div>
                               :
-                                  <div className="matrix__warning">
-                                      <br />
+                                  <div className="target-matrix__warning">
                                       { targetData && Object.keys(targetData).length === 0 ? 'Select an organism to view data.' : 'No data to display.' }
-                                      <br /><br /><br />
                                   </div>
                             }
                             <br />

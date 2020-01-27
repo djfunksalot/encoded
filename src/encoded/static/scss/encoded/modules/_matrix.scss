@@ -650,6 +650,11 @@ table.matrix th.group-all-groups-cell {
     @extend .matrix-reference-epigenome__organism-selector;
 }
 
+.target-matrix__warning {
+    min-height: 40px;
+    margin: 10px;
+}
+
 /**
  * Styles specific to the ENTEx matrix.
  */

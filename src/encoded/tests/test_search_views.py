@@ -460,8 +460,6 @@ def test_target_matrix_view(workbook, testapp):
     assert len(
         res['matrix']['y']['replicates.library.biosample.donor.organism.scientific_name']['buckets'][0]['target.label']['buckets']
 )       > 0
-    assert res['matrix']['viewableTabs'] == ['Homo sapiens', 'Mus musculus']
-    assert res['matrix']['assay_titles'] == ['Histone ChIP-seq', 'TF ChIP-seq']
 
 
 def test_search_views_summary_response(workbook, testapp):
