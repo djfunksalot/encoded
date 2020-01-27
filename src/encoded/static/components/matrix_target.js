@@ -105,7 +105,7 @@ const getTargetData = (context, assayTitle, organismName) => {
         targetData[subTab] = { headerRow, dataRow, assayTitle, organismName };
     });
 
-    const subTabs = subTabList;
+    const subTabs = subTabList.sort();
     const subTabsHeaders = [];
 
     subTabList.forEach((subTab) => {
