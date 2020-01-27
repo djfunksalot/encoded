@@ -4,7 +4,7 @@ import pluralize from 'pluralize';
 import url from 'url';
 import PubSub from 'pubsub-js';
 import QueryString from '../libs/query_string';
-import { Panel, PanelBody, TabPanel, TabPanelPane } from '../libs/ui/panel';
+import { Panel, PanelBody, TabPanelPane } from '../libs/ui/panel';
 import { Modal, ModalHeader, ModalBody } from '../libs/ui/modal';
 import { svgIcon } from '../libs/svg-icons';
 import * as globals from './globals';
