@@ -548,8 +548,13 @@ class TargetMatrixPresentation extends React.Component {
 
         this.targetMatrixData = Object.assign({}, data);
         this.subTabs = data ? data.subTabs : [];
-        this.subTabsHeaders = data.subTabs.map(subTab => ({ title: subTab }));
-        const selectedSubTab = data && data.subTabs && data.subTabs.length > 0 ? data.subTabs[0] : null;
+        this.subTabsHeaders = this.subTabs.map(subTab => ({ title: subTab }));
+
+        // check if subtab is in the url via hash. If yes use it. If no, use the first subTabs
+        const hash = link.split('#')[1];
+        const selectedSubTab = hash && this.subTabs.includes(hash) ?
+            hash :
+            this.subTabs.length > 0 ? data.subTabs[0] : null;
         const targetData = data ? data.targetData[selectedSubTab] : {};
 
         this.state = {
