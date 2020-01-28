@@ -544,23 +544,14 @@ class TargetMatrixPresentation extends React.Component {
         const query = new QueryString(link);
         const assayTitle = query.getKeyValues('assay_title')[0];
         const organismName = query.getKeyValues('replicates.library.biosample.donor.organism.scientific_name')[0];
-        const data = getTargetData(context, assayTitle, organismName);
 
-        this.targetMatrixData = Object.assign({}, data);
-        this.subTabs = data ? data.subTabs : [];
-        this.subTabsHeaders = this.subTabs.map(subTab => ({ title: subTab }));
-
-        // check if subtab is in the url via hash. If yes use it. If no, use the first subTabs
-        const hash = link.split('#')[1];
-        const selectedSubTab = hash && this.subTabs.includes(hash) ?
-            hash :
-            this.subTabs.length > 0 ? data.subTabs[0] : null;
-        const targetData = data ? data.targetData[selectedSubTab] : {};
+        this.subTabs = [];
+        this.targetMatrixData = [];
 
         this.state = {
-            targetData,
+            targetData: [],
             selectedTab: `${organismName} | ${assayTitle}`,
-            selectedSubTab,
+            selectedSubTab: null,
             scrolledRight: false,
             isSpinnerActive: true,
             showOrganismRequest: false,
@@ -569,18 +560,38 @@ class TargetMatrixPresentation extends React.Component {
 
     componentDidMount() {
         this.handleScrollIndicator(this.scrollElement);
+
+        // extra target matrix data and get relevant values out
         const { context } = this.props;
         const link = context['@id'];
         const query = new QueryString(link);
         const assayTitle = query.getKeyValues('assay_title')[0];
         const organismName = query.getKeyValues('replicates.library.biosample.donor.organism.scientific_name')[0];
         const showOrganismRequest = !(assayTitle && organismName);
-        this.searchSubcription = PubSub.subscribe(SEARCH_PERFORMED_PUBSUB, this.performSearch);
+
+        // ALL target matrix data
+        this.targetMatrixData = getTargetData(context, assayTitle, organismName);
+
+        // sub tabs
+        this.subTabs = this.targetMatrixData ? this.targetMatrixData.subTabs : [];
+
+        // subtab may be in the url #, get it if it is there or default to first subtabs list value
+        const hash = window ? window.decodeURIComponent(window.location.hash).replace('#', '') : null;
+        const selectedSubTab = hash && this.subTabs.includes(hash) ?
+            hash :
+            this.subTabs.length > 0 ? this.targetMatrixData.subTabs[0] : null;
+
+        // sub target data to display
+        const targetData = this.targetMatrixData ? this.targetMatrixData.targetData[selectedSubTab] : {};
 
         this.setState({
+            targetData,
+            selectedSubTab,
             isSpinnerActive: false,
             showOrganismRequest,
         });
+
+        this.searchSubcription = PubSub.subscribe(SEARCH_PERFORMED_PUBSUB, this.performSearch);
     }
 
     componentDidUpdate() {
@@ -722,7 +733,8 @@ class TargetMatrixPresentation extends React.Component {
     render() {
         const { context } = this.props;
         const { scrolledRight, targetData, showOrganismRequest, selectedSubTab } = this.state;
-        const fontColors = globals.biosampleTypeColors.colorList(this.targetMatrixData.subTabs, { merryGoRoundColors: true });
+        const fontColors = globals.biosampleTypeColors.colorList(this.subTabs, { merryGoRoundColors: true });
+        const subTabsHeaders = this.subTabs.map(subTab => ({ title: subTab })); // subtabs formatted to for displaying
 
         return (
             <div className="matrix__presentation">
@@ -735,7 +747,7 @@ class TargetMatrixPresentation extends React.Component {
                     <div className="matrix__label matrix__label--vert"><div>{svgIcon('largeArrow')}{context.matrix.y.label}</div></div>
                     {showOrganismRequest ? <GetTargets /> : null }
                     <TargetTabPanel tabs={headers} selectedTab={this.state.selectedTab} tabPanelCss="matrix__data-wrapper">
-                        <TargetTabPanel tabs={this.subTabsHeaders} selectedTab={selectedSubTab} tabPanelCss="matrix__data-wrapper" handleTabClick={this.subTabClicked} fontColors={fontColors}>
+                        <TargetTabPanel tabs={subTabsHeaders} selectedTab={selectedSubTab} tabPanelCss="matrix__data-wrapper" handleTabClick={this.subTabClicked} fontColors={fontColors}>
                             {targetData && targetData.headerRow && targetData.headerRow.length !== 0 && targetData.dataRow && targetData.dataRow.length !== 0 ?
                                   <div className="matrix__data" onScroll={this.handleOnScroll} ref={(element) => { this.scrollElement = element; }}>
                                       <DataTable tableData={convertTargetDataToDataTable(targetData, selectedSubTab)} />
