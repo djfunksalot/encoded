@@ -414,7 +414,7 @@ TargetMatrixContent.propTypes = {
  */
 class TargetTabPanel extends React.Component {
     render() {
-        const { tabs, navCss, moreComponents, moreComponentsClasses, tabFlange, decoration, decorationClasses, selectedTab, handleTabClick, fontColors } = this.props;
+        const { tabs, navCss, moreComponents, moreComponentsClasses, tabFlange, decoration, decorationClasses, selectedTab, urlHash, handleTabClick, fontColors } = this.props;
         let children = [];
         let firstPaneIndex = -1; // React.Children.map index of first <TabPanelPane> component
 
@@ -437,6 +437,7 @@ class TargetTabPanel extends React.Component {
         }
 
         const baseUrl = '/target-matrix/?type=Experiment';
+        const hash = urlHash ? `#${urlHash}` : '';
 
         return (
             <div className="target-matrix__data-wrapper">
@@ -444,7 +445,7 @@ class TargetTabPanel extends React.Component {
                     <ul className={`nav-tabs${navCss ? ` ${navCss}` : ''}`} role="tablist">
                         {tabs.map((tab, index) => (
                             <li key={index} role="presentation" aria-controls={tab.title} className={selectedTab === tab.title ? 'active' : ''}>
-                                <a href={tab.url ? `${baseUrl}&${tab.url}&status=released` : `#${tab.title}`} data-key={index} onClick={handleTabClick} style={{ color: fontColors ? fontColors[index] : 'black' }}>
+                                <a href={tab.url ? `${baseUrl}&${tab.url}&status=released${hash}` : `#${tab.title}`} data-key={index} onClick={handleTabClick} style={{ color: fontColors ? fontColors[index] : 'black' }}>
                                     {tab.title}
                                 </a>
                             </li>
@@ -483,6 +484,7 @@ TargetTabPanel.propTypes = {
     handleTabClick: PropTypes.func,
     children: PropTypes.node,
     fontColors: PropTypes.array,
+    urlHash: PropTypes.string,
 };
 
 TargetTabPanel.contextTypes = {
@@ -501,6 +503,7 @@ TargetTabPanel.defaultProps = {
     decorationClasses: null,
     handleTabClick: null,
     children: null,
+    urlHash: '',
 };
 
 
@@ -746,7 +749,7 @@ class TargetMatrixPresentation extends React.Component {
                 <div className="matrix__presentation-content">
                     <div className="matrix__label matrix__label--vert"><div>{svgIcon('largeArrow')}{context.matrix.y.label}</div></div>
                     {showOrganismRequest ? <GetTargets /> : null }
-                    <TargetTabPanel tabs={headers} selectedTab={this.state.selectedTab} tabPanelCss="matrix__data-wrapper">
+                    <TargetTabPanel tabs={headers} selectedTab={this.state.selectedTab} urlHash={this.state.selectedSubTab} tabPanelCss="matrix__data-wrapper">
                         <TargetTabPanel tabs={subTabsHeaders} selectedTab={selectedSubTab} tabPanelCss="matrix__data-wrapper" handleTabClick={this.subTabClicked} fontColors={fontColors}>
                             {targetData && targetData.headerRow && targetData.headerRow.length !== 0 && targetData.dataRow && targetData.dataRow.length !== 0 ?
                                   <div className="matrix__data" onScroll={this.handleOnScroll} ref={(element) => { this.scrollElement = element; }}>
