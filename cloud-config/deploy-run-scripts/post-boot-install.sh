@@ -8,6 +8,8 @@ echo -e "\n**** ENCDINSTALL $(basename $0) ****"
 
 S3_AUTH_KEYS=$1
 
+# Set python 3.7 versions
+sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 0
 # Update root vimrc for easier usage
 echo "set number" | sudo -u root tee -a '/etc/vim/vimrc'
 echo "filetype plugin indent on" | sudo -u root tee -a '/etc/vim/vimrc'

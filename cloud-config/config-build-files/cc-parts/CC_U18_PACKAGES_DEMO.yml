@@ -1,0 +1,54 @@
+packages:
+- awscli
+- git
+- unattended-upgrades
+# apache
+- apache2
+- apache2-utils
+- ssl-cert
+- libapache2-mod-wsgi-py3
+# cloudwatchmon
+# encoded app install
+## ckeditor
+- bsdtar
+## Pillow
+- libjpeg8-dev
+- zlib1g-dev
+## psycopg2
+- libpq-dev
+# es
+- apt-transport-https
+- elasticsearch
+# node
+- nodejs
+## node optional installed for native add-ons
+- g++
+- gcc
+- make
+# postgresql
+- daemontools
+- postgresql-11
+# python
+- build-essential
+- libffi-dev
+- libssl-dev
+- python3.7-dev
+- python3-pip
+- python3.7-venv
+- software-properties-common
+# redis
+- redis-server
+# wal-e
+- lzop
+# # unknown - Leaving these here for a bit just in case
+# - apache2-mpm-worker
+# - graphviz
+# - libevent-dev
+# - libmagic-dev
+# - libxml2-dev
+# - libxslt1-dev
+# - ntp
+# - pv
+# - ruby-dev
+# - update-notifier-common
+# - bsd-mailx

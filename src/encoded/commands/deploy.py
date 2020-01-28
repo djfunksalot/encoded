@@ -2,6 +2,37 @@
 Encoded Application AWS Deployment Helper
 
 - SpotClient was removed in EPIC-ENCD-4716/ENCD-4688-remove-unused-code-from-deploy.
+
+Ex) Build a new ami and deploy a demo
+1. Demo: the --build-ami argument sets the aws image to base ubbuntu 18
+    $ bin/deploy --build-ami -n encd-demo-ami
+    # ssh on and watch cloud-init-output.log for errors.
+    # Once completed, and the machine rebooted, contintue to next step.
+2. Go to aws console and create an image from the instnace
+    # Once completed, copy the the-image-ami-id
+3. Create a demo with the-image-ami-id
+    $ bin/deploy -n encd-demo-ami-test --image-id the-image-ami-id
+
+Ex) How to use this script to build a new config files, like the Ubuntu 18/Python 3.7 update
+1. Copy a demo prebuilt yaml in encoded/cloud-config/prebuilt-config-yamls
+    $ cp 20190923-pg11-demo.yml 20191112-pg11-u18-demo.yml
+2. Deploy use the new prebuilt yaml from encoded/
+    $ bin/deploy --use-prebuilt-config 20191112-pg11-u18-demo
+3. Update the prebuilt yaml by hand with necessary changes.
+4. Repeat 2. and 3. until the update is complete.
+5. Make a new template in encoded/cloud-config/config-build-files/
+    $ cp pg11-demo.yml u18-demo.yml
+6. Create a new set of files in encoded/cloud-config/config-build-files/cc-parts
+    to be used in u18-demo.yml template.  Examine older templates to see how.
+7. Diff the compiled yml with the manual yml.  Fix any differences.
+8. Save the compiled yml to prebuilt using today's date
+    $ bin/deploy --save-config-name 20200129
+9. Remove the manualy prebuilt, we'll keep the compiled version
+10. Deploy the new prebuilt as in step two.
+11. Make templates in encoded/cloud-config/config-build-files/ for es nodes and frontend.
+    Try to reused the demo cc-parts is possible.  Make new ones for es or frontend if needed.
+
+
 """
 import argparse
 import getpass
@@ -428,13 +459,15 @@ def _get_cloud_config_yaml(main_args):
         return None, None, None
     # Determine type of build from arguments
     # - es-nodes builds will overwrite the postgres version
-    build_type = 'demo'
+    build_type = 'u18-demo'
     if es_elect or es_wait:
-        build_type = 'es-nodes'
+        build_type = 'u18-es-nodes'
     elif cluster_name:
-        build_type = 'pg{}-frontend'.format(postgres_version.replace('.', ''))
-    else:
-        build_type = 'pg{}-{}'.format(postgres_version.replace('.', ''), build_type)
+        build_type = 'u18-frontend'
+    # elif cluster_name:
+    #     build_type = 'pg{}-frontend'.format(postgres_version.replace('.', ''))
+    # else:
+    #     build_type = 'pg{}-{}'.format(postgres_version.replace('.', ''), build_type)
     # Determine config build method
     if use_prebuilt_config and not diff_configs:
         # Read a prebuilt config file from local dir and use for deployment
