@@ -49,9 +49,9 @@ packages:
 - build-essential
 - libffi-dev
 - libssl-dev
-- python3-dev
+- python3.7-dev
 - python3-pip
-- python3-venv
+- python3.7-venv
 - software-properties-common
 # redis
 - redis-server
@@ -81,7 +81,7 @@ runcmd:
 - cloud-init-per once encd-redis %(CC_DIR)s/redis-install.sh %(REDIS_PORT)s
 - cloud-init-per once encd-elasticsearch %(CC_DIR)s/es-install.sh NONE %(JVM_GIGS)s %(ES_OPT_FILENAME)s NONE NONE
 - cloud-init-per once encd-cloudwatch %(CC_DIR)s/cloudwatchmon-install.sh
-- cloud-init-per once encd-post-ami %(CC_DIR)s/post-ami-install.sh %(CC_DIR)s %(ROLE)s %(WALE_S3_PREFIX)s %(PG_VERSION)s %(GIT_REPO)s %(GIT_REMOTE)s %(GIT_BRANCH)s %(ES_IP)s %(ES_PORT)s %(REGION_INDEX)s %(APP_WORKERS)s %(BATCHUPGRADE_VARS)s
+- cloud-init-per always encd-post-ami %(CC_DIR)s/post-ami-install.sh %(CC_DIR)s %(ROLE)s %(WALE_S3_PREFIX)s %(PG_VERSION)s %(GIT_REPO)s %(GIT_REMOTE)s %(GIT_BRANCH)s %(ES_IP)s %(ES_PORT)s %(REGION_INDEX)s %(APP_WORKERS)s %(BATCHUPGRADE_VARS)s
 users:
 - default
 - name: build
