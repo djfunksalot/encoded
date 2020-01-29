@@ -1046,6 +1046,9 @@
         "biosample_ontology": "tissue_UBERON_0000948",
         "date_obtained": "2013-01-31",
         "description": "mouse dev matrix biosample_1",
+        "internal_tags": [
+            "MouseDevSeries"
+        ],
         "lab": "len-pennacchio",
         "model_organism_age": "0",
         "model_organism_age_units": "day",
@@ -1063,6 +1066,9 @@
         "biosample_ontology": "tissue_UBERON_0000948",
         "date_obtained": "2013-01-31",
         "description": "mouse dev matrix biosample_2",
+        "internal_tags": [
+            "MouseDevSeries"
+        ],
         "lab": "len-pennacchio",
         "model_organism_age": "6",
         "model_organism_age_units": "day",
@@ -1080,6 +1086,9 @@
         "biosample_ontology": "tissue_UBERON_0000948",
         "date_obtained": "2013-01-31",
         "description": "mouse dev matrix biosample_3",
+        "internal_tags": [
+            "MouseDevSeries"
+        ],
         "lab": "len-pennacchio",
         "model_organism_age": "12",
         "model_organism_age_units": "day",
