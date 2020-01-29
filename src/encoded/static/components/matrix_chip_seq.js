@@ -30,8 +30,10 @@ const CLEAR_SEARCH_BOX_PUBSUB = 'clearSearchBox';
  *      chIPSeqData is an object where:
  *          key is a sub Tab
  *          value is of structure - { headerRow, dataRow, assayTitle, organismName };
- *              headerRow - header content
- *              dataRow - non-header content
+ *              headerRow - header content-list
+ *              dataRow - array of non-header content
+ *                  key: biosample ontology classification
+ *                  value: array containing counts
  *              assayTitle - Assay title
  *              organismName- Organism name
  *      subTabs: List of subTabs for easy access
@@ -94,12 +96,22 @@ const getChIPSeqData = (context, assayTitle, organismName) => {
             });
         });
 
-        const dataRow = [];
+        let dataRow = [];
         const keys = Object.keys(dataRowT);
 
+        // move biosample ontology classifications to dataRow-group
         keys.forEach((key) => {
             dataRow.push(dataRowT[key]);
         });
+
+        // Remove all rows with no data (all entries/count are zero)
+        // Remove this line if you want to show all data and not just ones with content
+        dataRow = dataRow.filter((d) => {
+            const data = [...d]; // !Imporant. Clone to avoid modifying dataRow itself
+            data.shift(); // remove first entry as it is biosample ontology classification and not a count
+            return !data.every(i => i === 0); // remove all rows with all zeros
+        });
+
         chIPSeqData[subTab] = { headerRow, dataRow, assayTitle, organismName };
     });
 
