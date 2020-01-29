@@ -9,9 +9,13 @@ Ex) Build a new ami and deploy a demo
     # ssh on and watch cloud-init-output.log for errors.
     # Once completed, and the machine rebooted, contintue to next step.
 2. Go to aws console and create an image from the instnace
-    # Once completed, copy the the-image-ami-id
-3. Create a demo with the-image-ami-id
-    $ bin/deploy -n encd-demo-ami-test --image-id the-image-ami-id
+3. Once completed,
+    * terminate the ami ec2 instance
+    * create tags for the ami image, with started-by your-name, desc like buildtype and date
+    * copy the the-image-ami-id to use to build a demo instance
+3. Create a demo with the-image-ami-id, ex) ami-01366d03ce8820081
+    $ bin/deploy -n encd-demo-ami-test --image-id ami-01366d03ce8820081
+$ QA the demo, as a PR that updates the AMI in the deploy.py
 
 Ex) How to use this script to build a new config files, like the Ubuntu 18/Python 3.7 update
 1. Copy a demo prebuilt yaml in encoded/cloud-config/prebuilt-config-yamls
