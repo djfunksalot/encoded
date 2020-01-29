@@ -1,5 +1,9 @@
 ## Changelog for annotation.json
 
+### Schema version 27
+
+* Update IHEC dbxref regex to remove version number
+
 ### Schema version 26
 * Altered *encyclopedia_version* from free text to an enum list of terms, including a new specification for ENCODE v5.
 
