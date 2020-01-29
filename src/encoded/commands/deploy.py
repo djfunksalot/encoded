@@ -541,6 +541,7 @@ def main():
         _write_config_to_file(build_config, build_path, build_type)
         sys.exit(0)
     # Deploy Frontend, Demo, es elect cluster, or es wait data nodes
+    print(build_config)
     print('# Deploying %s' % build_type)
     print("# $ {}".format(' '.join(sys.argv)))
     instances_tag_data, is_tag = _get_instances_tag_data(main_args)
