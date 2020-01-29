@@ -188,7 +188,7 @@ class Experiment(Dataset,
         },
     }
 
-    target_matrix = {
+    chip_seq_matrix = {
         'y': {
             'group_by': [
                 'replicates.library.biosample.donor.organism.scientific_name',

@@ -606,7 +606,7 @@ table.matrix th.group-all-groups-cell {
 .matrix__content--target {
     @extend .matrix__content--reference-epigenome;
 
-    .target-matrix__data-wrapper {
+    .chip_seq_matrix__data-wrapper {
         li {
             cursor: -webkit-grab;
             cursor: grab;
@@ -617,7 +617,7 @@ table.matrix th.group-all-groups-cell {
     }
 }
 
-.target-matrix-search {
+.chip_seq_matrix-search {
     display: flex;
     justify-content: space-between;
 
@@ -646,11 +646,11 @@ table.matrix th.group-all-groups-cell {
     }
 }
 
-.target-matrix__organism-selector {
+.chip_seq_matrix__organism-selector {
     @extend .matrix-reference-epigenome__organism-selector;
 }
 
-.target-matrix__warning {
+.chip_seq_matrix__warning {
     min-height: 40px;
     margin: 10px;
 }

@@ -12,5 +12,5 @@ scenarios(
     'matrix_entex.feature',
     'matrix_experiment.feature',
     'matrix_reference_epigenome.feature',
-    'matrix_target.feature'
+    'matrix_chip_seq.feature'
 )

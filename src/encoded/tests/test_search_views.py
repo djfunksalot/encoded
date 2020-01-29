@@ -436,13 +436,13 @@ def test_search_views_matrix_response_no_results(workbook, testapp):
     assert r.json['notification'] == 'No results found'
 
 
-def test_target_matrix_view(workbook, testapp):
-    res = testapp.get('/target-matrix/?type=Experiment').json
-    assert res['@type'] == ['TargetMatrix']
-    assert res['@id'] == '/target-matrix/?type=Experiment'
+def test_chip_seq_matrix_view(workbook, testapp):
+    res = testapp.get('/chip_seq_matrix/?type=Experiment').json
+    assert res['@type'] == ['ChIPSeqMatrix']
+    assert res['@id'] == '/chip_seq_matrix/?type=Experiment'
     assert res['@context'] == '/terms/'
     assert res['notification'] == 'Success'
-    assert res['title'] == 'Target Matrix'
+    assert res['title'] == 'ChIP Seq Matrix'
     assert res['total'] > 0
     assert 'filters' in res
     assert 'matrix' in res

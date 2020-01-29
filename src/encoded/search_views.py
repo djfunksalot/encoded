@@ -42,7 +42,7 @@ def includeme(config):
     config.add_route('matrix', '/matrix{slash:/?}')
     config.add_route('reference-epigenome-matrix', '/reference-epigenome-matrix{slash:/?}')
     config.add_route('entex-matrix', '/entex-matrix{slash:/?}')
-    config.add_route('target_matrix', '/target-matrix{slash:/?}')
+    config.add_route('chip-seq-matrix', '/chip-seq-matrix{slash:/?}')
     config.add_route('summary', '/summary{slash:/?}')
     config.add_route('audit', '/audit{slash:/?}')
     config.scan(__name__)
@@ -219,25 +219,25 @@ def matrix(context, request):
     return fr.render()
 
 
-@view_config(route_name='target_matrix', request_method='GET', permission='search')
-def target_matrix(context, request):
+@view_config(route_name='chip-seq-matrix', request_method='GET', permission='search')
+def chip_seq_matrix(context, request):
     fr = FieldedResponse(
         _meta={
             'params_parser': ParamsParser(request)
         },
         response_fields=[
             TitleResponseField(
-                title='Target Matrix'
+                title='ChIP Seq Matrix'
             ),
             TypeResponseField(
-                at_type=['TargetMatrix']
+                at_type=['ChIPSeqMatrix']
             ),
             IDResponseField(),
             SearchBaseResponseField(),
             ContextResponseField(),
             BasicMatrixWithFacetsResponseField(
                 default_item_types=DEFAULT_ITEM_TYPES,
-                matrix_definition_name='target_matrix',
+                matrix_definition_name='chip_seq_matrix',
                 facets=[
                     ('status', {'title': 'Status'}),
                     ('award.project', {'title': 'Project'}),

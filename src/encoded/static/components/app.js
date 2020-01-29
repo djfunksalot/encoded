@@ -41,7 +41,7 @@ const portal = {
             children: [
                 { id: 'assaymatrix', title: 'Experiment matrix', url: '/matrix/?type=Experiment&status=released' },
                 { id: 'assaysearch', title: 'Experiment search', url: '/search/?type=Experiment&status=released' },
-                { id: 'targetmatrix', title: 'ChIP matrix', url: '/target-matrix/?type=Experiment&replicates.library.biosample.donor.organism.scientific_name=Homo%20sapiens&assay_title=Histone%20ChIP-seq&status=released' },
+                { id: 'chipseqmatrix', title: 'ChIP Seq matrix', url: '/chip-seq-matrix/?type=Experiment&replicates.library.biosample.donor.organism.scientific_name=Homo%20sapiens&assay_title=Histone%20ChIP-seq&status=released' },
                 { id: 'functional-char-assays', title: 'Functional characterization search', url: '/search/?type=FunctionalCharacterizationExperiment' },
                 { id: 'sep-mm-1' },
                 { id: 'cloud', title: 'Cloud Resources' },
