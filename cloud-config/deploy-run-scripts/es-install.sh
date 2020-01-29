@@ -34,7 +34,7 @@ function append_with_user {
 
 if [ "$ES_IP" == "NONE" ]; then
     # Initial ES install
-
+    echo -e "\n\t: ENCDINSTALL $(basename $0): ES_IP is NONE"
     # jvm options
     jvm_opts_filename='jvm.options'
     jvm_xms='-Xms'"$JVM_GIGS"'g'
@@ -63,9 +63,11 @@ if [ "$ES_IP" == "NONE" ]; then
 else
     # Post AMI Install, wait for es restart
     # Only for single demos, and frontends
-
+    echo -e "\n\t: ENCDINSTALL $(basename $0): ES_IP is NOT NONE"
     # wait for status to be yellow or green
+    watch_dog=0
     while true; do
+        watch_dog=$((watch_dog + 1))
         es_status="$(curl -fsSL '$ES_IP:$ES_PORT/_cat/health?h=status')"
         echo "ES Demo Status: '$es_status'"
         if [ "$es_status" == 'yellow' ] || [ "$es_status" == 'green' ]; then
@@ -75,6 +77,10 @@ else
             sleep_secs=10
             echo "Waiting for es to turn yellow or green. Sleep for $sleep_secs"
             sleep $sleep_secs
+        fi
+        if [ $watch_dog -gt 10 ]; then
+            echo -e "\n\t: ENCDINSTALL $(basename $0): ES_IP is NOT NONE.  WATCH_DOG"
+            break
         fi
     done
 fi

@@ -26,7 +26,7 @@ if [ -f "$encoded_app_is_installed_file_flag" ]; then
 else
     if [ -f "$encoded_app_do_install_file_flag" ]; then
         # When using ami to build a demo
-        echo 'POST AMI INSTALL: Installing Now'
+        echo "POST AMI INSTALL: Installing Now: ES_IP=$ES_IP"
         sudo -u ubuntu git -C /home/ubuntu/encoded checkout -b $GIT_BRANCH $GIT_REMOTE/$GIT_BRANCH
         $CC_DIR/es-install.sh NONE NONE NONE "$ES_IP" "$ES_PORT"
         $CC_DIR/pg-install.sh off $ROLE $WALE_S3_PREFIX $PG_VERSION
