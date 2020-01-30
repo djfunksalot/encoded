@@ -461,7 +461,6 @@ const addToAccumulatingFacets = (accumulatingResults, currentResults, facetField
             }
         });
     }
-    console.log('FR %o\nAR %o', fileResults, accumulatingResults);
     return fileResults;
 };
 
@@ -1067,7 +1066,6 @@ class CartComponent extends React.Component {
 
             // Use the file information to build the facet objects for rendering.
             const { facets, selectedFileCount } = this.assembleFacets(newSelectedTerms);
-            console.log('FACETS %o', facets);
             this.setState({ facets, selectedFileCount, selectedTerms: newSelectedTerms }, () => { this.loadPageFiles(); });
         });
     }
@@ -1077,6 +1075,7 @@ class CartComponent extends React.Component {
      * experiments, generate a list of facets and corresponding counts. The length of the files
      * array could be in the hundreds of thousands, so this data has to be extracted by going
      * through this array only once per render.
+     * @param {object} selectedTerms Currently selectd terms; use from React state if not provided
      */
     assembleFacets(selectedTerms) {
         const facets = [];

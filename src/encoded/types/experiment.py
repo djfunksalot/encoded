@@ -51,10 +51,12 @@ class Experiment(Dataset,
     schema = load_schema('encoded:schemas/experiment.json')
     embedded = Dataset.embedded + [
         'biosample_ontology',
+        'files.biosample_ontology',
         'files.platform',
         'files.analysis_step_version.analysis_step',
         'files.analysis_step_version.analysis_step.pipelines',
         'files.quality_metrics',
+        'files.target',
         'related_series',
         'replicates.antibody',
         'replicates.library',
