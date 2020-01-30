@@ -74,7 +74,7 @@ class Dataset(Item):
         'submitted_by',
         'lab',
         'award.pi.lab',
-        'references',
+        'references'
     ]
     audit_inherit = [
         'original_files',
