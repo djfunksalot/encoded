@@ -49,8 +49,8 @@ packages:
 - build-essential
 - libffi-dev
 - libssl-dev
-- python3.7-dev
 - python3-pip
+- python3.7-dev
 - python3.7-venv
 - software-properties-common
 # redis

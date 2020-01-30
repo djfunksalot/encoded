@@ -178,7 +178,7 @@ if [ $python_version -eq 3 ]; then
     sudo -u root chown postgres:postgres "$WALE_DIR"
     sudo -u root cp "$WALE_REQS" "$WALE_DIR/wal-e-requirements.txt"
     sudo -u root chown postgres:postgres "$WALE_DIR/wal-e-requirements.txt"
-    sudo -H -u postgres python3 -m venv "$WALE_VENV"
+    sudo -H -u postgres /usr/bin/python3.7 -m venv "$WALE_VENV"
     sudo -H -u postgres "$WALE_BIN/pip" install pip setuptools --upgrade
     sudo -H -u postgres "$WALE_BIN/pip" install boto awscli PyYAML==5.2
     sudo -H -u postgres "$WALE_BIN/pip" install -r "$WALE_DIR/wal-e-requirements.txt"

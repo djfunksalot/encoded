@@ -18,7 +18,7 @@ sudo -H -u encoded git clone "$GIT_REPO" "$encd_home"
 sudo -H -u encoded git checkout -b "$GIT_BRANCH" "$git_uri"
 
 encd_venv="$encd_home/.pyvenv"
-sudo -H -u encoded python3 -m venv "$encd_venv"
+sudo -H -u encoded /usr/bin/python3.7 -m venv "$encd_venv"
 source "$encd_venv/bin/activate"
 sudo -H -u encoded "$encd_venv/bin/pip" install --upgrade pip setuptools
 sudo -H -u encoded "$encd_venv/bin/pip" install --upgrade zc.buildout redis
