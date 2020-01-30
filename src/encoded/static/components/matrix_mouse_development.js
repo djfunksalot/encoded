@@ -281,7 +281,7 @@ const MatrixHeader = ({ context }) => {
     return (
         <div className="matrix-header">
             <div className="matrix-header__title">
-                <h1>{type ? `${type} ` : ''}{context.title}</h1>
+                <h1>{context.title}</h1>
                 <div className="matrix-tags">
                     <MatrixInternalTags context={context} />
                 </div>
@@ -303,29 +303,6 @@ const MatrixHeader = ({ context }) => {
 MatrixHeader.propTypes = {
     /** Matrix search result object */
     context: PropTypes.object.isRequired,
-};
-
-
-/**
- * Render the vertical facets.
- */
-const MatrixVerticalFacets = ({ context }, reactContext) => (
-    <FacetList
-        facets={context.facets}
-        filters={context.filters}
-        searchBase={`${url.parse(reactContext.location_href).search}&` || '?'}
-        addClasses="matrix-facets"
-    />
-);
-
-MatrixVerticalFacets.propTypes = {
-    /** Matrix search result object */
-    context: PropTypes.object.isRequired,
-};
-
-MatrixVerticalFacets.contextTypes = {
-    location_href: PropTypes.string,
-    navigate: PropTypes.func,
 };
 
 
@@ -465,7 +442,6 @@ MatrixPresentation.propTypes = {
  */
 const MatrixContent = ({ context, rowCategoryGetter, rowSubCategoryGetter, mapRowCategoryQueries, mapSubCategoryQueries }) => (
     <div className="matrix__content">
-        <MatrixVerticalFacets context={context} />
         <MatrixPresentation context={context} rowCategoryGetter={rowCategoryGetter} rowSubCategoryGetter={rowSubCategoryGetter} mapRowCategoryQueries={mapRowCategoryQueries} mapSubCategoryQueries={mapSubCategoryQueries} />
     </div>
 );
@@ -575,4 +551,4 @@ MouseDevelopmentMatrix.contextTypes = {
     biosampleTypeColors: PropTypes.object, // DataColor instance for experiment project
 };
 
-globals.contentViews.register(MouseDevelopmentMatrix, 'Matrix');
+globals.contentViews.register(MouseDevelopmentMatrix, 'MouseDevelopmentMatrix');
