@@ -52,6 +52,10 @@ def calculate_assembly(request, files_list, status):
 class Dataset(Item):
     base_types = ['Dataset'] + Item.base_types
     embedded = [
+        'submitted_by',
+        'lab',
+        'award.pi.lab',
+        'references',
         'files',
         'files.replicate',
         'files.replicate.experiment',
