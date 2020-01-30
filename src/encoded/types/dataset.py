@@ -52,10 +52,6 @@ def calculate_assembly(request, files_list, status):
 class Dataset(Item):
     base_types = ['Dataset'] + Item.base_types
     embedded = [
-        'submitted_by',
-        'lab',
-        'award.pi.lab',
-        'references',
         'files',
         'files.replicate',
         'files.replicate.experiment',
@@ -71,6 +67,10 @@ class Dataset(Item):
         'revoked_files.replicate.experiment.target',
         'revoked_files.replicate.experiment.target.genes',
         'revoked_files.submitted_by',
+        'submitted_by',
+        'lab',
+        'award.pi.lab',
+        'references',
     ]
     audit_inherit = [
         'original_files',
